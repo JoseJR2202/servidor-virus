@@ -4,8 +4,6 @@ import { signUpUser } from '@helpers/session';
 import { authenticate } from 'passport';
 import { generateToken } from '@utils/strategies';
 import { passportAuth } from '@middlewares/middlewares';
-import { signUpFieldsValidation, loginFieldsValidation, checkResult } from '@validations/fields';
-
 const router = Router();
 
 router.get('/', (req, res) => {
@@ -18,7 +16,7 @@ router.get('/logout', (req: any, res) => {
   res.json({ status: 200, message: 'Sesión finalizada.' });
 });
 
-router.post('/signup', /* signUpFieldsValidation, checkResult, */ async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     console.log(req.body.nombre);
     const data = await signUpUser(req.body.nombre);
@@ -28,7 +26,7 @@ router.post('/signup', /* signUpFieldsValidation, checkResult, */ async (req, re
   }
 });
 
-router.post('/user', isLogged, loginFieldsValidation, checkResult, authenticate('local'), async (req: any, res) => {
+router.post('/user', isLogged, authenticate('local'), async (req: any, res) => {
   res.status(200).json({
     id:req.user.id
   });
